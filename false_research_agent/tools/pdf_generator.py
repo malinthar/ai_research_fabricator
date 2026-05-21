@@ -80,18 +80,34 @@ def _parse_sections(text: str) -> dict[str, str]:
         stripped = line.strip()
         if not stripped:
             continue
-        if stripped.endswith(":"):
-            heading = stripped[:-1]
-        else:
-            heading = stripped if stripped in _KNOWN_HEADINGS else None
-        if heading in _KNOWN_HEADINGS:
+        heading, inline_text = _extract_heading(stripped)
+        if heading is not None:
             flush()
             current = heading
+            if inline_text:
+                buffer.append(inline_text)
             continue
         buffer.append(stripped)
 
     flush()
+    if not sections and text.strip():
+        sections["Manuscript"] = " ".join(line.strip() for line in text.splitlines() if line.strip())
     return sections
+
+
+def _extract_heading(line: str) -> tuple[str | None, str | None]:
+    cleaned = line.strip()
+    if cleaned.startswith("#"):
+        cleaned = cleaned.lstrip("#").strip()
+    if cleaned.startswith("**") and cleaned.endswith("**"):
+        cleaned = cleaned.strip("*").strip()
+
+    for heading in _KNOWN_HEADINGS:
+        if cleaned == heading or cleaned == f"{heading}:":
+            return heading, None
+        if cleaned.lower().startswith(heading.lower() + ":"):
+            return heading, cleaned[len(heading) + 1 :].strip()
+    return None, None
 
 
 def _build_results_table(results: List[AnalysisResult]) -> Table | None:

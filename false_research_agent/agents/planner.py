@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import logging
 from pathlib import Path
 from typing import Any, Dict
 
@@ -14,6 +15,7 @@ class PlannerAgent:
     def __init__(self, llm: OllamaClient, prompt_path: Path) -> None:
         self._llm = llm
         self._prompt_path = prompt_path
+        self._logger = logging.getLogger(self.__class__.__name__)
 
     def plan(self, hypothesis: str, objective: str) -> StudyDesign:
         system_prompt, user_template = self._load_prompts()
@@ -29,8 +31,38 @@ class PlannerAgent:
         return blocks[0].strip(), blocks[1].strip()
 
     def _validate(self, response: Dict[str, Any]) -> StudyDesign:
+        response = self._sanitize_response(response)
         try:
             return StudyDesign.model_validate(response)
         except ValidationError as exc:
             message = json.dumps(response, indent=2, ensure_ascii=True)
             raise ValueError(f"Planner output failed validation: {message}") from exc
+
+    def _sanitize_response(self, response: Dict[str, Any]) -> Dict[str, Any]:
+        normalized = dict(response)
+
+        duration = normalized.get("duration_weeks")
+        if isinstance(duration, int) and duration < 2:
+            self._logger.warning("Planner duration_weeks=%s below minimum; clamping to 2", duration)
+            normalized["duration_weeks"] = 2
+
+        sample_size = normalized.get("sample_size")
+        if isinstance(sample_size, int) and sample_size < 40:
+            self._logger.warning("Planner sample_size=%s below minimum; clamping to 40", sample_size)
+            normalized["sample_size"] = 40
+
+        method = normalized.get("analysis_method")
+        if isinstance(method, str):
+            lowered = method.lower().replace(" ", "")
+            if "anova" in lowered:
+                normalized["analysis_method"] = "ANOVA"
+            elif "ttest" in lowered or "t-test" in lowered:
+                normalized["analysis_method"] = "t-test"
+            elif "regression" in lowered or "ols" in lowered:
+                normalized["analysis_method"] = "linear_regression"
+
+        if normalized.get("analysis_method") not in {"t-test", "ANOVA", "linear_regression"}:
+            self._logger.warning("Planner analysis_method invalid; defaulting to ANOVA")
+            normalized["analysis_method"] = "ANOVA"
+
+        return normalized

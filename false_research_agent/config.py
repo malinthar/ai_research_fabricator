@@ -9,7 +9,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class OllamaConfig(BaseModel):
     host: str = Field(default="http://localhost:11434")
-    model: str = Field(default="qwen2.5")
+    model: str = Field(default="gemma3")
     temperature: float = Field(default=0.2, ge=0.0, le=2.0)
     top_p: float = Field(default=0.9, ge=0.0, le=1.0)
     max_tokens: int = Field(default=2048, ge=128, le=8192)
@@ -41,6 +41,7 @@ class AppConfig(BaseSettings):
         )
     )
     study_type: Literal["rct", "quasi_experimental"] = Field(default="rct")
+    max_sample_size: int = Field(default=200, ge=40, le=2000)
     ollama: OllamaConfig = Field(default_factory=OllamaConfig)
     data: DataConfig = Field(default_factory=DataConfig)
     output: OutputConfig = Field(default_factory=OutputConfig)

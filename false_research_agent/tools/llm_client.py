@@ -8,7 +8,6 @@ import ollama
 
 from false_research_agent.config import OllamaConfig
 
-
 class OllamaClient:
     def __init__(self, config: OllamaConfig) -> None:
         self._config = config
