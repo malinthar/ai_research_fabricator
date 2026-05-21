@@ -1,0 +1,15 @@
+local_llm/
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+dist/
+build/
+
+.env
+.env.*
+
+.DS_Store
+
+outputs/
+*.log

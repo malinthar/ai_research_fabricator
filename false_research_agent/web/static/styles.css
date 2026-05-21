@@ -1,0 +1,154 @@
+:root {
+  color-scheme: light;
+  font-family: "Source Serif Pro", "Times New Roman", serif;
+  background: #f4efe9;
+  color: #1a1a1a;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: radial-gradient(circle at top left, #f6f0e6, #e9dfd1);
+}
+
+.page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 48px 24px 80px;
+  display: grid;
+  gap: 28px;
+}
+
+.hero {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  align-items: center;
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: 0.75rem;
+  color: #756a5b;
+  margin-bottom: 8px;
+}
+
+h1 {
+  font-size: clamp(2.4rem, 4vw, 3.4rem);
+  margin: 0 0 8px;
+}
+
+.subtitle {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  margin: 0;
+  color: #2d241c;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 18px;
+  padding: 24px;
+  box-shadow: 0 16px 40px rgba(58, 39, 20, 0.12);
+}
+
+.tip h2 {
+  margin-top: 0;
+}
+
+.form-card form {
+  display: grid;
+  gap: 16px;
+}
+
+label {
+  display: grid;
+  gap: 8px;
+  font-size: 0.95rem;
+}
+
+textarea,
+input,
+select {
+  border-radius: 12px;
+  border: 1px solid #c6b8a3;
+  padding: 12px;
+  font-size: 0.95rem;
+  background: #fffdf9;
+}
+
+.example-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+  align-items: end;
+}
+
+.example-row button {
+  height: 44px;
+  align-self: end;
+}
+
+.grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+}
+
+button {
+  background: #2f2a24;
+  color: #fffdf7;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 999px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 20px rgba(47, 42, 36, 0.2);
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.output-links {
+  display: grid;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.output-links a {
+  color: #6b3f2b;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.analysis-preview {
+  margin-top: 16px;
+  background: #1f1b16;
+  color: #f6f1ea;
+  padding: 16px;
+  border-radius: 12px;
+  overflow-x: auto;
+  max-height: 300px;
+}
+
+@media (max-width: 700px) {
+  .page {
+    padding: 32px 16px 60px;
+  }
+
+  .example-row {
+    grid-template-columns: 1fr;
+  }
+}
