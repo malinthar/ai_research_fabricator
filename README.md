@@ -1,10 +1,82 @@
-# System Overview
+# Adversarial Research Agent
 
-## What This System Is
+![System figure](figure.png)
 
-This project is a false research agent that simulates an academic study pipeline from end to end. It takes a research objective and hypothesis, creates a study design, generates synthetic data, runs statistical analysis, writes a manuscript, and renders a PDF report.
+> A simulated research pipeline that turns an objective and hypothesis into a study design, synthetic data, statistical analysis, a manuscript, and a final PDF report.
 
-The system is designed to produce plausible research outputs for testing or demonstration purposes. It is not meant to claim real-world experimental evidence or actual deployment results.
+## At A Glance
+
+- Generates a full research-style workflow from prompt to PDF.
+- Uses Ollama for local model generation.
+- Produces reproducible outputs in `outputs/runs/<run_id>/`.
+- Includes a web UI and a simple command-line launcher.
+
+## What It Does
+
+This project simulates an academic study pipeline end to end. It takes a research objective and hypothesis, creates a study design, generates synthetic data, runs statistical analysis, writes a manuscript, and renders a PDF report.
+
+It is designed for testing, demonstration, and prototyping. It is not meant to claim real-world experimental evidence or deployment results.
+
+## Prerequisites
+
+- **Python 3.10+**
+- **pip**
+- **Ollama** with a compatible model such as `gemma3`
+
+Verify your setup:
+
+```bash
+python --version
+python -m pip --version
+ollama --version
+```
+
+If Ollama is not installed, follow the official installation guide for your platform: [Ollama installation](https://ollama.com/docs/installation).
+
+Pull a model and start Ollama:
+
+```bash
+ollama pull gemma3
+ollama serve &
+```
+
+## Installation
+
+1. Download the ZIP of this repository and extract it to a folder on your computer.
+2. Open a terminal in the extracted folder.
+3. Install the package:
+
+```bash
+pip install .
+```
+
+## Run It
+
+For a quick launch after extracting the ZIP:
+
+macOS / Linux:
+
+```bash
+bash scripts/bundle_start.sh
+```
+
+Windows:
+
+```bat
+scripts\bundle_start.bat
+```
+
+If you already installed the package, you can also run:
+
+```bash
+false-research-agent web
+```
+
+Open the local app in your browser at:
+
+```text
+http://localhost:8000
+```
 
 ## How It Works
 
@@ -21,22 +93,22 @@ The main pipeline lives in `false_research_agent/orchestrator.py` and runs these
 
 ```mermaid
 flowchart LR
-	A[Input] --> B[Plan]
-	B --> C[Data]
-	C --> D[Analysis]
-	D --> E[Manuscript]
-	E --> F[PDF]
+    A[Input] --> B[Plan]
+    B --> C[Data]
+    C --> D[Analysis]
+    D --> E[Manuscript]
+    E --> F[PDF]
 ```
 
 ## Core Components
 
-- `false_research_agent/agents/planner.py` creates structured study design JSON.
-- `false_research_agent/agents/writer.py` turns the design and analysis into a manuscript.
-- `false_research_agent/tools/llm_client.py` calls the Ollama model and controls generation settings such as temperature and `max_tokens`.
-- `false_research_agent/tools/synthetic_data.py` creates the simulated dataset.
-- `false_research_agent/tools/statistics.py` computes the analysis results.
-- `false_research_agent/tools/pdf_generator.py` and `false_research_agent/tools/latex_generator.py` produce the final report.
-- `false_research_agent/web/server.py` exposes the web API and serves the browser UI.
+- `Planner` creates structured study design JSON.
+- `Writer` turns the design and analysis into a manuscript.
+- `LLM Client` calls the Ollama model and controls generation settings such as temperature and `max_tokens`.
+- `Synthetic Data Generator` creates the simulated dataset.
+- `Statistics` computes the analysis results.
+- `PDF Generator` and `LaTeX Generator` produce the final report.
+- `Web Server` exposes the web API and serves the browser UI.
 
 ## Output Artifacts
 
@@ -50,6 +122,22 @@ Each run writes a timestamped folder under `outputs/runs/` containing:
 - `report.pdf`
 
 The web app also keeps a small run history in `outputs/history.json`.
+
+## One-Command Bundle Start
+
+If you send the ZIP to someone who is not a programmer, tell them to extract it and run the bundled starter for their system. The script installs the package into the current user environment and launches the app.
+
+macOS / Linux:
+
+```bash
+bash scripts/bundle_start.sh
+```
+
+Windows:
+
+```bat
+scripts\bundle_start.bat
+```
 
 ## Key Controls
 

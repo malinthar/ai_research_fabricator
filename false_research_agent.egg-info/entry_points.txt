@@ -1,0 +1,2 @@
+[console_scripts]
+false-research-agent = false_research_agent.cli:main

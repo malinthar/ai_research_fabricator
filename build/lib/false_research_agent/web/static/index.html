@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Adversarial Research Agent</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <main class="page">
+      <header class="hero">
+        <div>
+          <p class="eyebrow">Create a manuscript for your hypothesis</p>
+          <h1>Adversarial Research Agent</h1>
+        </div>
+      </header>
+
+      <section class="card form-card">
+        <h2>New Study</h2>
+        <form id="run-form">
+          
+          <label>
+            Objective
+            <textarea id="objective" rows="3" placeholder="High-level research objective"></textarea>
+          </label>
+          <label>
+            Hypothesis
+            <textarea id="hypothesis" rows="3" placeholder="Predefined false hypothesis"></textarea>
+          </label>
+          <div class="example-row">
+            <label>
+              Load form preset
+              <select id="example-select">
+                <option value="">Select a preset...</option>
+                <option value="sun_west">Sun rises in the west</option>
+                <option value="heavy_faster">Heavier objects fall faster</option>
+                <option value="seasons_distance">Seasons caused by distance to sun</option>
+                <option value="boiling_high">Boiling higher at high altitude</option>
+              </select>
+            </label>
+            <button type="button" id="load-example">Load example</button>
+          </div>
+          <details class="advanced">
+            <summary>Advanced settings</summary>
+            <div class="advanced-grid">
+              <label>
+                Model
+                <select id="model">
+                  <option value="gemma3">gemma3</option>
+                </select>
+              </label>
+              <div class="advanced-row">
+                <label>
+                  Seed
+                  <input id="seed" type="number" min="0" placeholder="42" />
+                </label>
+                <label>
+                  Temperature
+                  <input id="temperature" type="number" min="0" max="2" step="0.1" placeholder="0.2" />
+                </label>
+                <label>
+                  Top-p
+                  <input id="top_p" type="number" min="0" max="1" step="0.05" placeholder="0.9" />
+                </label>
+              </div>
+            </div>
+          </details>
+          <button type="submit" id="run-button">Start</button>
+        </form>
+      </section>
+
+      <section class="card output-card" hidden>
+        <div class="status-bar">
+          <div>
+            <div id="status" class="status-text">Waiting for a run...</div>
+            <div id="activity" class="activity">Idle</div>
+          </div>
+          <div class="status-meta">
+            <div id="percent" class="percent">0%</div>
+          </div>
+        </div>
+        <div id="output-links" class="output-links"></div>
+        <div class="preview">
+          <div class="preview-header">
+            <span>Manuscript preview</span>
+            <button type="button" id="preview-toggle">Show preview</button>
+          </div>
+          <pre id="manuscript-preview" class="manuscript-preview" hidden></pre>
+        </div>
+        <pre id="analysis-preview" class="analysis-preview" hidden></pre>
+        <div class="history" id="history">
+          <div class="history-header">
+            <span>Recent runs</span>
+            <button type="button" id="delete-history" class="ghost" disabled>Delete selected</button>
+          </div>
+          <div class="history-list" id="history-list"></div>
+        </div>
+      </section>
+    </main>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>
